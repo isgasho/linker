@@ -8,8 +8,10 @@ import (
 )
 
 type Config struct {
-	Symlink Symlink `hcl:"symlink,block"`
+	Symlinks Symlinks `hcl:"symlink,block"`
 }
+
+type Symlinks []Symlink
 
 type Symlink struct {
 	Source string `hcl:"source,attr"`
@@ -23,9 +25,11 @@ func main() {
 		panic(err)
 	}
 
-	err = os.Symlink(config.Symlink.Source, config.Symlink.Target)
-	if err != nil {
-		panic(err)
+	for _, sym := range config.Symlinks {
+		err = os.Symlink(sym.Source, sym.Target)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", sym.Target, sym.Source))
 	}
-	fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", config.Symlink.Target, config.Symlink.Source))
 }
