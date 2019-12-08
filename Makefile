@@ -1,6 +1,6 @@
 GOARCH := $(shell go env GOARCH)
 GOOS := $(shell go env GOOS)
-VERSION := $(shell git describe --abbrev=0)
+VERSION := $(shell git describe --tags --abbrev=0)
 
 .PHONY: build
 build:
