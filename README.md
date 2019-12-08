@@ -29,3 +29,36 @@ This means one of the following:
 in order to be able to place them efficiently, for example, `~/`.
 
 * One has to keep jumping to various directories and execute stow accordingly.
+
+## Features
+
+* Single-file configuration
+* Declarative syntax
+* Feels like terraform, but without statefiles
+
+## Installation
+
+Download binary for your system from the release page.
+
+## How to use?
+
+1. Create a file named `main.hcl`. The syntax is:
+
+```hcl
+symlink {
+    source = "path/to/file1"
+    target = "path/to/symlink1"
+}
+
+symlink {
+    source = "path/to/file2"
+    target = "path/to/symlink2"
+}
+
+symlink {
+    source = "path/to/file3"
+    target = "path/to/symlink3"
+}
+```
+
+1. Run `linker` in the same directory as `main.hcl`.
