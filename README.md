@@ -1,5 +1,6 @@
 # linker
 [![Build Status](https://cloud.drone.io/api/badges/domust/linker/status.svg?ref=refs/heads/master)](https://cloud.drone.io/domust/linker)
+[![GoDoc](https://godoc.org/github.com/domust/linker?status.svg)](https://godoc.org/github.com/domust/linker)
 [![Go Report Card](https://goreportcard.com/badge/domust/linker)](https://goreportcard.com/report/domust/linker)
 [![codebeat badge](https://codebeat.co/badges/138238ba-db9d-4c8a-a10e-a4f121cbcc71)](https://codebeat.co/projects/github-com-domust-linker-master)
 
