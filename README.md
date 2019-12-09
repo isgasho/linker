@@ -1,5 +1,6 @@
 # linker
 [![Build Status](https://cloud.drone.io/api/badges/domust/linker/status.svg?ref=refs/heads/master)](https://cloud.drone.io/domust/linker)
+[![Go Report Card](https://goreportcard.com/badge/domust/linker)](https://goreportcard.com/report/domust/linker)
 
 Linker is a declarative symlink manager in the spirit of terraform.
 
