@@ -1,4 +1,4 @@
-package main
+package linker
 
 import (
 	"fmt"
@@ -18,18 +18,19 @@ type Symlink struct {
 	Target string `hcl:"target,attr"`
 }
 
-func main() {
+func Link(filename string) error {
 	var config Config
-	err := hcl.DecodeFile("main.hcl", nil, &config)
+	err := hcl.DecodeFile(filename, nil, &config)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	for _, sym := range config.Symlinks {
 		err = os.Symlink(sym.Source, sym.Target)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", sym.Target, sym.Source))
 	}
+	return nil
 }

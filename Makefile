@@ -4,7 +4,7 @@ VERSION := $(shell git describe --tags --abbrev=0)
 
 .PHONY: build
 build:
-	go build --ldflags "-w -s"
+	go build --ldflags "-w -s" -o linker cmd/main.go
 
 .PHONY: clean
 clean:
