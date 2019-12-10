@@ -1,3 +1,7 @@
+/*
+Linker is a declarative symlink manager in the spirit of terraform.
+It is meant as a more flexible replacement of GNU stow.
+*/
 package main
 
 import "github.com/domust/linker"

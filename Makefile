@@ -11,5 +11,5 @@ clean:
 	rm linker *.tgz
 
 .PHONY: archive
-archive:
+archive: build
 	tar -czf ${VERSION}-${GOOS}_${GOARCH}.tgz linker
