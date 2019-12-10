@@ -1,25 +1,22 @@
+/*
+Package linker allows the users to extend the linker tool
+in any way they like without modifying the original one.
+This way an original one can be kept small and simple.
+*/
 package linker
 
 import (
 	"fmt"
 	"os"
 
+	"github.com/domust/linker/internal"
 	hcl "github.com/hashicorp/hcl/v2/hclsimple"
 )
 
-type Config struct {
-	Symlinks Symlinks `hcl:"symlink,block"`
-}
-
-type Symlinks []Symlink
-
-type Symlink struct {
-	Source string `hcl:"source,attr"`
-	Target string `hcl:"target,attr"`
-}
-
+// Link creates symbolic links based on contents of the file
+// passed to it. File must be in either HCL or JSON format.
 func Link(filename string) error {
-	var config Config
+	var config internal.Config
 	err := hcl.DecodeFile(filename, nil, &config)
 	if err != nil {
 		return err
