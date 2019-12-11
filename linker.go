@@ -34,17 +34,22 @@ func Link(filename string) error {
 	}
 
 	for _, sym := range config.Symlinks {
+		src := sym.Source
 		tgt := sym.Target
+		if !strings.HasPrefix(src, "/") {
+			src = path.Join(base, src)
+		}
+
 		if strings.HasPrefix(tgt, "~/") {
 			tgt = path.Join(home, strings.TrimPrefix(tgt, "~/"))
 		} else if !strings.HasPrefix(tgt, "/") {
 			tgt = path.Join(base, tgt)
 		}
 
-		if err := os.Symlink(sym.Source, tgt); err != nil {
+		if err := os.Symlink(src, tgt); err != nil {
 			return err
 		}
-		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", tgt, sym.Source))
+		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", tgt, src))
 	}
 	return nil
 }
