@@ -8,6 +8,8 @@ package linker
 import (
 	"fmt"
 	"os"
+	"path"
+	"strings"
 
 	"github.com/domust/linker/internal"
 	hcl "github.com/hashicorp/hcl/v2/hclsimple"
@@ -17,17 +19,32 @@ import (
 // passed to it. File must be in either HCL or JSON format.
 func Link(filename string) error {
 	var config internal.Config
-	err := hcl.DecodeFile(filename, nil, &config)
+	if err := hcl.DecodeFile(filename, nil, &config); err != nil {
+		return err
+	}
+
+	base, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	home, err := os.UserHomeDir()
 	if err != nil {
 		return err
 	}
 
 	for _, sym := range config.Symlinks {
-		err = os.Symlink(sym.Source, sym.Target)
-		if err != nil {
+		tgt := sym.Target
+		if strings.HasPrefix(tgt, "~/") {
+			tgt = path.Join(home, strings.TrimPrefix(tgt, "~/"))
+		} else if !strings.HasPrefix(tgt, "/") {
+			tgt = path.Join(base, tgt)
+		}
+
+		if err := os.Symlink(sym.Source, tgt); err != nil {
 			return err
 		}
-		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", sym.Target, sym.Source))
+		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", tgt, sym.Source))
 	}
 	return nil
 }
