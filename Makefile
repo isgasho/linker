@@ -6,6 +6,11 @@ VERSION := $(shell git describe --tags --abbrev=0)
 build:
 	go build --ldflags "-w -s" -o linker cmd/main.go
 
+.PHONY: test
+test:
+	go test ./... -v
+	rm testdata/target*
+
 .PHONY: clean
 clean:
 	rm linker *.tgz

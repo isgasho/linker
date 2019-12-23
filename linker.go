@@ -46,10 +46,22 @@ func Link(filename string) error {
 			tgt = path.Join(base, tgt)
 		}
 
+		if linkExists(tgt) {
+			continue
+		}
 		if err := os.Symlink(src, tgt); err != nil {
 			return err
 		}
 		fmt.Printf("Symlink %q successfully created\n", fmt.Sprintf("%s -> %s", tgt, src))
 	}
 	return nil
+}
+
+// linkExists returns true when symlink exists
+func linkExists(filename string) bool {
+	_, err := os.Lstat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
