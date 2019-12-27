@@ -6,12 +6,30 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/domust/linker"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
-	if err := linker.Link("main.hcl"); err != nil {
-		log.Fatalln(err)
+	app := &cli.App{
+		Name:        "linker",
+		Description: "declarative symbolic manager",
+		Commands: []*cli.Command{
+			{
+				Name:   "link",
+				Usage:  "create symbolic links defined in a file",
+				Action: link,
+			},
+		},
 	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func link(c *cli.Context) error {
+	return linker.Link("main.hcl")
 }
