@@ -57,6 +57,48 @@ func Link(filename string) error {
 	return nil
 }
 
+// Unlink destroys every symbolic link described in a file passed
+// to it. File must be in either HCL or JSON format.
+func Unlink(filename string) error {
+	var config internal.Config
+	if err := hcl.DecodeFile(filename, nil, &config); err != nil {
+		return err
+	}
+
+	base, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	for _, sym := range config.Symlinks {
+		src := sym.Source
+		tgt := sym.Target
+		if !strings.HasPrefix(src, "/") {
+			src = path.Join(base, src)
+		}
+
+		if strings.HasPrefix(tgt, "~/") {
+			tgt = path.Join(home, strings.TrimPrefix(tgt, "~/"))
+		} else if !strings.HasPrefix(tgt, "/") {
+			tgt = path.Join(base, tgt)
+		}
+
+		if !linkExists(tgt) {
+			continue
+		}
+		if err := os.Remove(tgt); err != nil {
+			return err
+		}
+		fmt.Printf("Symlink %q successfully removed\n", fmt.Sprintf("%s -> %s", tgt, src))
+	}
+	return nil
+}
+
 // linkExists returns true when symlink exists
 func linkExists(filename string) bool {
 	_, err := os.Lstat(filename)

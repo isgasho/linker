@@ -3,7 +3,10 @@ package linker
 import "testing"
 
 func TestLink(t *testing.T) {
-	if err := Link("testdata/main.hcl"); err != nil {
+	testFile := "testdata/main.hcl"
+	defer Unlink(testFile)
+
+	if err := Link(testFile); err != nil {
 		t.Fatal(err)
 	}
 }

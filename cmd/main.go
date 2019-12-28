@@ -22,6 +22,11 @@ func main() {
 				Usage:  "create symbolic links defined in a file",
 				Action: link,
 			},
+			{
+				Name:   "unlink",
+				Usage:  "remove symbolic links defined in a file",
+				Action: unlink,
+			},
 		},
 	}
 
@@ -32,4 +37,8 @@ func main() {
 
 func link(c *cli.Context) error {
 	return linker.Link("main.hcl")
+}
+
+func unlink(c *cli.Context) error {
+	return linker.Unlink("main.hcl")
 }
